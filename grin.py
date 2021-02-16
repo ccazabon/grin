@@ -774,6 +774,8 @@ def get_grin_arg_parser(parser=None):
         help="show program's version number and exit")
     parser.add_argument('-i', '--ignore-case', action='append_const',
         dest='re_flags', const=re.I, default=[], help="ignore case in the regex")
+    parser.add_argument('-F', '--fixed-string', action='store_true',
+        dest='fixed_string', default=False, help='search pattern is fixed string, not regex')
     parser.add_argument('-A', '--after-context', default=0, type=int,
         help="the number of lines of context to show after the match [default=%(default)r]")
     parser.add_argument('-B', '--before-context', default=0, type=int,
@@ -1018,6 +1020,8 @@ def get_regex(args):
     flags = 0
     for flag in args.re_flags:
         flags |= flag
+    if args.fixed_string:
+        args.regex = re.escape(args.regex)
     return re.compile(args.regex, flags)
 
 

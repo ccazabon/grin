@@ -6,6 +6,7 @@ Set up
     >>> import grin
     >>> from io import BytesIO
     >>> import re
+    >>> import collections
     >>>
     >>> all_foo = b"""\
     ... foo
@@ -66,6 +67,16 @@ Set up
     ... bar
     ... bar
     ... """
+    >>> regex_metachar_foo = b"""\
+    ... bar
+    ... bar
+    ... def foo(...):
+    ... bar
+    ... foo
+    ... bar
+    ... bar
+    ... """
+
 
 Test the basic defaults, no context.
 
@@ -88,6 +99,24 @@ Test the basic defaults, no context.
     [(0, 0, 'foo', [(0, 3)])]
     >>> gt_default.do_grep(BytesIO(middle_of_line))
     [(2, 0, 'barfoobar\n', [(3, 6)])]
+    >>> # Fixed string support
+    >>> class args:
+    ...     re_flags = []
+    ...     regex = 'foo('
+    ...     fixed_string = True
+    >>> regex = grin.get_regex(args)
+    >>> gt_fixedstring_match = grin.GrepText(regex)
+    >>> gt_fixedstring_match.do_grep(BytesIO(regex_metachar_foo))
+    [(2, 0, 'def foo(...):\n', [(4, 8)])]
+    >>> # If fixed_string isn't set, the unbalanced paren should throw exception
+    >>> args.fixed_string = False
+    >>> args.regex = 'foo('
+    >>> try:
+    ...     regex = grin.get_regex(args)
+    ... except Exception as e:
+    ...     print e
+    unbalanced parenthesis
+
 
 Symmetric 1-line context.
 
