@@ -6,7 +6,6 @@ Set up
     >>> import grin
     >>> from io import BytesIO
     >>> import re
-    >>> import collections
     >>>
     >>> all_foo = b"""\
     ... foo
