@@ -113,8 +113,8 @@ Test the basic defaults, no context.
     >>> try:
     ...     regex = grin.get_regex(args)
     ... except Exception as e:
-    ...     print e
-    unbalanced parenthesis
+    ...     str(e)
+    'unbalanced parenthesis'
 
 
 Symmetric 1-line context.
