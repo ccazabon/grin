@@ -110,11 +110,14 @@ Test the basic defaults, no context.
     >>> # If fixed_string isn't set, the unbalanced paren should throw exception
     >>> args.fixed_string = False
     >>> args.regex = 'foo('
+    >>> failed = False
     >>> try:
     ...     regex = grin.get_regex(args)
     ... except Exception as e:
-    ...     str(e)
-    'unbalanced parenthesis'
+    ...     failed = True
+    ...
+    >>> str(failed)
+    'True'
 
 
 Symmetric 1-line context.
